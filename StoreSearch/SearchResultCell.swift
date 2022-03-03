@@ -39,9 +39,14 @@ class SearchResultCell: UITableViewCell {
         nameLabel.text = result.name
 
         if result.artist.isEmpty {
-            artistNameLabel.text = "Unknown"
+            artistNameLabel.text = NSLocalizedString("Unknown", comment: "Artist name: Unknown")
         } else {
-            artistNameLabel.text = String(format: "%@ (%@)", result.artist, result.type)
+            artistNameLabel.text = String(
+                format: NSLocalizedString(
+                    "ARTIST_NAME_LABEL_FORMAT",
+                    comment: "Format for artist name"),
+                result.artist,
+                result.type)
         }
         artworkImageView.image = UIImage(systemName: "square")
         if let smallURL = URL(string: result.imageSmall) {

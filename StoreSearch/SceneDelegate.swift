@@ -16,8 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
-    }
+        // guard let _ = (scene as? UIWindowScene) else { return }
+        searchVC.splitViewDetail = detailVC
+        splitVC.delegate = self
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            splitVC.preferredDisplayMode = .oneBesideSecondary
+        }
+  }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
@@ -46,7 +51,30 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    // MARK: - Properties
+    var splitVC: UISplitViewController {
+        return window!.rootViewController as! UISplitViewController
+    }
 
+    var searchVC: SearchViewController {
+        let nav = splitVC.viewControllers.first as! UINavigationController
+        return nav.viewControllers.first as! SearchViewController
+    }
 
+    var detailVC: DetailViewController {
+        let nav = splitVC.viewControllers.last as! UINavigationController
+        return nav.viewControllers.first as! DetailViewController
+    }
 }
+
+extension SceneDelegate: UISplitViewControllerDelegate {
+    func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .primary
+        }
+        return proposedTopColumn
+    }
+}
+
 
